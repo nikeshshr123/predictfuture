@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: starling-oracle
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build:render
+    startCommand: npm run start:render
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "24.21.0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: starling-oracle-db
+          property: connectionString
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: starling-oracle-db
+    plan: free
+    ipAllowList: []
